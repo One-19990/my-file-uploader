@@ -1,0 +1,13 @@
+name: Process Upload
+on:
+  repository_dispatch:
+    types: [file_upload]
+jobs:
+  save-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 保存文件
+        run: |
+          echo "${{ github.event.client_payload.fileContent }}" > uploads/${{ github.event.client_payload.fileName }}
+          git add . && git commit -m "自动保存文件" && git push
